@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "./styles.css";
+import Table from "./table.js";
 
 var changeDict = {
   "2000": 0,
@@ -18,6 +19,8 @@ export default function App() {
 
   const [bill, setBill] = useState(0);
   const [given, setGiven] = useState(0);
+
+  const [changeCalc, setChangeCalc] = useState("False");
 
   function resetDictionary() {
     var notesAvailable = Object.keys(changeDict);
@@ -57,6 +60,19 @@ export default function App() {
     }
     setChange(changeDict);
     console.log(changeDict);
+    setChangeCalc(true);
+  }
+
+  function updateBill(e) {
+    setBill(e.target.value);
+    setChangeCalc(false);
+    setMessage("");
+  }
+
+  function updateGiven(e) {
+    setGiven(e.target.value);
+    setChangeCalc(false);
+    setMessage("");
   }
 
   return (
@@ -67,37 +83,13 @@ export default function App() {
         number of notes to return
       </h2>
       <h3> Bill Amount </h3>
-      <input type="number" onChange={(e) => setBill(e.target.value)}></input>
+      <input type="number" onChange={(e) => updateBill(e)}></input>
       <h3> Cash Given </h3>
-      <input type="number" onChange={(e) => setGiven(e.target.value)}></input>
+      <input type="number" onChange={(e) => updateGiven(e)}></input>
       <button onClick={() => calculateChange(bill, given)}>Calculate</button>
       {console.log(bill, given)}
       <h3> {message} </h3>
-      <table className="change-table">
-        <caption> Return Change </caption>
-        <tbody>
-          <tr className="shaded">
-            <th>Note Denomination</th>
-            <td>2000</td>
-            <td>500</td>
-            <td>100</td>
-            <td>20</td>
-            <td>10</td>
-            <td>5</td>
-            <td>1</td>
-          </tr>
-          <tr>
-            <th> No of Notes </th>
-            <td className="no-of-notes">{change["2000"]}</td>
-            <td className="no-of-notes">{change["500"]}</td>
-            <td className="no-of-notes">{change["100"]}</td>
-            <td className="no-of-notes">{change["20"]}</td>
-            <td className="no-of-notes">{change["10"]}</td>
-            <td className="no-of-notes">{change["5"]}</td>
-            <td className="no-of-notes">{change["1"]}</td>
-          </tr>
-        </tbody>
-      </table>
+      <Table change={change} bill={bill} given={given} status={changeCalc} />
       <footer>
         <p> Created by Thomas Alex </p>
         <p> As a part of markTen neoGCamp </p>
